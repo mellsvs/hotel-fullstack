@@ -52,7 +52,6 @@ const AddRoom = () => {
 			setErrorMessage("")
 		}, 3000)
 	}
-
 	return (
 		<>
 			<section className="container mt-5 mb-5">
