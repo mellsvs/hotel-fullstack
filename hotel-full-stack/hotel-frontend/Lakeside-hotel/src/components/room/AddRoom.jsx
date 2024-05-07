@@ -1,32 +1,32 @@
 import React, { useState } from 'react'
 import {addRoom} from "../utils/ApiFunctions"
+import RoomTypeSelector from '../common/RoomTypeSelector'
 
 const AddRoom = () => {
-    const [newRoom,setNewRoom] = useState({
+    const [newRoom, setNewRoom] = useState({
        photo : null ,
        roomType : "",
        roomPrice : ""
     })
+
 const [imagePreview, setImagePreview] = useState("")
 const [successMessage,setSuccessMessage] = useState("")
 const [errorMessage,setErrorMessage]=useState("")
 
-const handleRoomInputChange = (e) =>{
+const handleRoomInputChange = (e) => {
     const name = e.target.name
     let value = e.target.value
-    if(name === "roomPrice"){
-        if(!isNaN(value)){
-
-            value.parseInt(value)
-        }
-        else{
-            value=""
+    if (name === "roomPrice") {
+        if (!isNaN(value)) {
+            value = parseInt(value)
+        } else {
+            value = ""
         }
     }
-    setNewRoom({ ...newRoom ,[name]: value})
+    setNewRoom({ ...newRoom, [name]: value })
 }
 
-const handleImageChange = (e) =>{
+const handleImageChange = (e) => {
     const selectedImage = e.target.files[0]
     setNewRoom({...newRoom,photo: selectedImage})
     setImagePreview(URL.createObjectURL(selectedImage))
@@ -37,7 +37,7 @@ const handleSubmit = async(e) =>{
         const success = await addRoom(newRoom.photo, newRoom.roomType,newRoom.roomPrice)
         if(success !== undefined){
             setSuccessMessage(" A new room  was added to the database !")
-            setNewRoom({photo: null , roomType: "" , roomPrice: ""})
+            setNewRoom({ photo: null , roomType: "" , roomPrice: ""})
             setImagePreview("")
             setErrorMessage("")
         } else{
@@ -56,25 +56,30 @@ const handleSubmit = async(e) =>{
 
             <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                <label htmlFor="roomType"className="form-label">
+                <label htmlFor= "roomType" className= "form-label">
                     Room Type
                     </label>
-                    <div></div>
+                    <div>
+                    <RoomTypeSelector 
+                    handleRoomInputChange={handleRoomInputChange}
+                    newRoom ={newRoom}
+                     />
+                    </div>
                 </div>
 
             <div className="mb-3">
                 <label htmlFor="roomPrice"className="form-label">
                     Room Price
-                    </label>
-            
-
+                </label>
+        
             <input 
-            className="form-control"
-            required
-            id="roomPrice"
-            name ="roomPrice"
-            value={newRoom.roomPrice}
-            onChange={handleRoomInputChange}
+                className="form-control"
+                required
+                id="roomPrice"
+                type="number"
+                name ="roomPrice"
+                value={newRoom.roomPrice}
+                onChange={handleRoomInputChange}
             />
             </div>
 
