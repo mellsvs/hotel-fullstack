@@ -1,8 +1,11 @@
 package com.mellsvs.Hotelbooking.controller;
 
+import com.mellsvs.Hotelbooking.exception.PhotoRetrievalException;
 import com.mellsvs.Hotelbooking.model.BookedRoom;
 import com.mellsvs.Hotelbooking.model.Room;
+import com.mellsvs.Hotelbooking.response.BookingResponse;
 import com.mellsvs.Hotelbooking.response.RoomResponse;
+import com.mellsvs.Hotelbooking.service.BookingService;
 import com.mellsvs.Hotelbooking.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
@@ -12,6 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.math.BigDecimal;
+import java.sql.Blob;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,6 +28,7 @@ import java.util.List;
 public class RoomController {
 
     private final IRoomService roomService;
+    private final BookingService bookingService;
     @PostMapping("/add/new-room")
     public ResponseEntity <RoomResponse> addNewRoom(@RequestParam("photo") MultipartFile photo,
                                                     @RequestParam("roomType") String roomType,
@@ -44,6 +49,7 @@ public class RoomController {
     {
       return roomService.getAllRoomTypes();
     }
+    @GetMapping("all-rooms")
     public ResponseEntity<List<RoomResponse>> getAllRooms() throws SQLException {
         List<Room> rooms =roomService.getAllRooms();
         List<RoomResponse> roomResponses = new ArrayList<>();
@@ -61,11 +67,28 @@ public class RoomController {
 
     private RoomResponse getRoomResponse(Room room) {
         List<BookedRoom>bookings = getAllBookingsByRoomId(room.getId());
-        return null;
+        List<BookingResponse> bookingInfo = bookings
+                .stream()
+                .map(booking -> new BookingResponse(booking.getBookingId(),
+                        booking.getCheckInDate(),
+                        booking.getCheckOutDate(),booking.getBookingConfirmationCode())).toList();
+        byte[] photoBytes = null;
+        Blob photoBlob = room.getPhoto();
+        if(photoBlob != null){
+            try{
+                photoBytes = photoBlob.getBytes(1,(int) photoBlob.length());
+        }catch (SQLException e){
+            throw new PhotoRetrievalException("Error retrieving photo");
+            }
+        }
+        return new RoomResponse(room.getId(),
+                room.getRoomType(),
+                room.getRoomPrice(),
+                room.isBooked(),photoBytes,bookingInfo);
     }
 
-    private List<BookedRoom> getAllBookingsByRoomId(Long id) {
-        return null;
+    private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
+        return bookingService.getAllBookingsByRoomId(roomId);
     }
 
 
