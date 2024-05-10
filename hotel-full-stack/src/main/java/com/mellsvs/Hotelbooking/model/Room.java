@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.hibernate.annotations.Type;
 
 import java.math.BigDecimal;
 import java.sql.Blob;
@@ -21,7 +22,7 @@ public class Room {
     private String roomType;
     private BigDecimal roomPrice;
     private boolean isBooked = false;
-    @Lob
+   @Lob
     private Blob photo;
 
     @OneToMany(mappedBy ="room", fetch = FetchType.LAZY,cascade = CascadeType.ALL)
