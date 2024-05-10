@@ -9,6 +9,7 @@ import com.mellsvs.Hotelbooking.service.BookingService;
 import com.mellsvs.Hotelbooking.service.IRoomService;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.codec.binary.Base64;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
@@ -88,10 +89,17 @@ public class RoomController {
                 room.getRoomPrice(),
                 room.isBooked(),photoBytes);
     }
+    @DeleteMapping("/delete/room/{roomId}")
+
+    public ResponseEntity<Void> deleteRoom(@PathVariable Long roomId){
+        roomService.deleteRoom(roomId);
+        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+    }
 
     private List<BookedRoom> getAllBookingsByRoomId(Long roomId) {
         return bookingService.getAllBookingsByRoomId(roomId);
     }
+
 
 
 }

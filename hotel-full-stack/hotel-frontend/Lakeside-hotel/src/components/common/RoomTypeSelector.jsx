@@ -1,5 +1,5 @@
-import React, { useEffect,useState } from 'react'
-import { getRoomTypes } from '../utils/ApiFunctions'
+import React, { useState, useEffect } from "react"
+import { getRoomTypes } from "../utils/ApiFunctions"
 
 const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 	const [roomTypes, setRoomTypes] = useState([""])
@@ -41,7 +41,7 @@ const RoomTypeSelector = ({ handleRoomInputChange, newRoom }) => {
 						}}
 						value={newRoom.roomType}>
 						<option value="">Select a room type</option>
-						<option value={"Add New"}><b>Add New</b></option>
+						<option value={"Add New"}>Add New</option>
 						{roomTypes.map((type, index) => (
 							<option key={index} value={type}>
 								{type}

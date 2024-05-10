@@ -11,7 +11,7 @@ const RoomPaginator = ({currentPage, totalPages,onPageChange}) => {
         <li 
         key = {pageNumber}
         className={`page-item ${currentPage === pageNumber ? "active" : ""}`} >
-          <button className="page-link" onClick={()=>onPageChange(pageNumber)}>
+          <button className="page-link" onClick={() => onPageChange(pageNumber)}>
             {pageNumber}
           </button>
 
