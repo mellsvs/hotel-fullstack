@@ -1,13 +1,24 @@
-import React from 'react'
+import React, { useContext } from "react"
+import MainHeader from "../layout/MainHeader"
+import HotelService from "../common/HotelService"
+import Parallax from "../common/Parallax"
+
 
 const Home = () => {
-  return (
-    <div>
-        <h2>
-            WELCOME TO HOME PAGE
-        </h2>
-    </div>
-  )
+	
+	return (
+		<section>
+     <MainHeader />
+			
+      <section className="container">
+
+      <Parallax/>
+      <HotelService/>
+      <Parallax/>
+
+      </section>
+		</section>
+	)
 }
 
 export default Home
